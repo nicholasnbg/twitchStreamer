@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Twitch Streamer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/logic.js"></script>
+  <body>
+    <div class="header-row">
+  <div class="container">
+    <div class="row">
+      <h1>Your Twitch Dashboard</h1>
+    </div>
+  </div>
+</div>
+<div class="options">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 info">
+        <span id="add">Add your favorite streamers!</span>
+        <p>Status will update every 15 seconds!</p>
+      </div>
+    </div>
+    <div class="row menu">
+      <div class="col-xs-12 col-md-3 col-md-offset-2" id="toggle">
+          <button class="btn btn-default">All</button>
+          <button class="btn btn-success">Online</button>
+      </div>
+      <div class="col-xs-12 col-md-5" id="search-menu">
+        <input id="search-stream" type="text" placeholder="Find streams...">
+        <button class="btn btn-primary" id="search-btn">Add +</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Insert Twitch boxes below -->
+<div id="streams">
+  <div id="streamsContainer" class="container">
+
+  </div>
+</div>
+  </body>
+</html>
