@@ -75,7 +75,32 @@ body {
   border-radius: 0 1em 1em 0;
 }
 
+#streamsContainer {
+  padding: 0 15%;
+  font-size: 120%;
+}
+
 #streamsContainer > .row {
-  height: 250px;
   border: 1px solid black;
+  margin-bottom: 10px;
+}
+
+#streamsContainer img {
+  height: 100px;
+  width: 100px;
+}
+
+.streamName {
+  margin-left: 10%;
+}
+
+.online {
+  background-color: #B8CCA6;
+}
+
+.offline{
+  background-color: #ccc;
+}
+.offline img {
+  padding:7px;
 }

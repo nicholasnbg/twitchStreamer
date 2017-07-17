@@ -10,29 +10,59 @@ $(document).ready(function(){
 
   //store JSON data for each channel
   channels.forEach(function(x,i){
-    $.getJSON(streams_api+x+clientID, function(data){
-       streamData.push(data);
+    console.log(streams_api+x+clientID);
+    $.ajax({
+      url: streams_api+x+clientID,
+      dataType: "json",
+      data: {
+        format: "json",
+      },
+      success: function(data){
+        fetchData(data, i);
+      },
+      error: function(){
+        console.log("Couldn't access JSON");
+      }
     });
   });
- console.log(streamData[0]);
 
-  var createRows = function(rows){
-    for(i=0;i<rows;i++){
-      $("#streamsContainer").append('<div class="row"></div>')
+  function fetchData(data, i){
+
+    var streamInfo = {
+      'logo':'',
+      'text':'',
+      'name:':'',
+      'link':'',
+      'status':'',
+    }
+    if(data.stream === null){
+
+      streamInfo.text = " is OFFLINE";
+      streamInfo.status = "offline"
+      streamInfo.name = channels[i];
+      streamInfo.link = data._links.channel;
+      streamInfo.logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/ProhibitionSign2.svg/1200px-ProhibitionSign2.svg.png";
+      //run function to append row
+      insertStream(streamInfo);
+    }
+    else if(data.stream._id){
+        streamInfo.name = channels[i];
+        streamInfo.status="online";
+        streamInfo.text = name  + " is currently playing " + data.stream.game;
+        streamInfo.logo =  data.stream.channel.logo;
+        streamInfo.link = data.stream._links.self;
+        //run function to insert row
+      insertStream(streamInfo);
+
     }
   }
 
-  var insertStream = function(){
-    $("#streamsContainer > row:nth-child(1)").append('abc');
-    streamData.forEach(function(stream,i){
-      var streamRow = Math.ceil(i/3);
-      $("#streamsContainer:nth-child(1)").append('abc');
-    })
-  }
+  function insertStream(streamObj){
+    var rowHTML = '<div class="row '+streamObj.status+'"><img src="'+streamObj.logo+'" alt=""><span class= "streamName">'+streamObj.name+'</span><span class="streamText">'+streamObj.text+'</span></div>';
+    $("#streamsContainer").append(rowHTML);
+  };
 
 
-  createRows(rows);
-  insertStream();
 
 
 
