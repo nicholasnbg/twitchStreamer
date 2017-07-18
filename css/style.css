@@ -83,6 +83,7 @@ body {
 #streamsContainer > .row {
   border: 1px solid black;
   margin-bottom: 10px;
+  display: flex;
 }
 
 #streamsContainer img {
@@ -103,4 +104,8 @@ body {
 }
 .offline img {
   padding:7px;
+}
+
+.linkSpan {
+  align-self: flex-end;
 }

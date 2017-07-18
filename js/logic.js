@@ -3,7 +3,7 @@ $(document).ready(function(){
   //variables
   var clientID = '?client_id=z2yjt6dgs59kua030e1m9pa1i9rifx';
   var streams_api = "https://api.twitch.tv/kraken/streams/";
-  var channels = ["ESL_SC2", "OgamingSC2", "Killingbird"];
+  var channels = ["ESL_SC2", "OgamingSC2", "Killingbird", "faketwitchjiberish"];
   var streamData = [];
   var streamCount = 3;
   var rows = 1;
@@ -22,6 +22,7 @@ $(document).ready(function(){
       },
       error: function(){
         console.log("Couldn't access JSON");
+
       }
     });
   });
@@ -35,8 +36,10 @@ $(document).ready(function(){
       'link':'',
       'status':'',
     }
-    if(data.stream === null){
 
+    //offline is currently running both ifs, fix this
+    if(data.stream === null){
+      console.log('stream is null');
       streamInfo.text = " is OFFLINE";
       streamInfo.status = "offline"
       streamInfo.name = channels[i];
@@ -46,6 +49,7 @@ $(document).ready(function(){
       insertStream(streamInfo);
     }
     else if(data.stream._id){
+      console.log('stream is live');
         streamInfo.name = channels[i];
         streamInfo.status="online";
         streamInfo.text = name  + " is currently playing " + data.stream.game;
@@ -60,7 +64,13 @@ $(document).ready(function(){
   function insertStream(streamObj){
     var rowHTML = '<div class="row '+streamObj.status+'"><img src="'+streamObj.logo+'" alt=""><span class= "streamName">'+streamObj.name+'</span><span class="streamText">'+streamObj.text+'</span></div>';
     $("#streamsContainer").append(rowHTML);
+    if(streamObj.status === "online"){
+      var linkSpan = '<span class="linkSpan">Watch Now</span>';
+      $("#streamsContainer>.row").append(linkSpan);
+    }
   };
+
+
 
 
 
