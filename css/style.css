@@ -107,7 +107,7 @@ body {
 }
 
 .offline{
-  background-color: #ccc;
+  background-color: #ccc !important;
 }
 
 .offline img {

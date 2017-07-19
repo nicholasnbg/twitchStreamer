@@ -83,7 +83,7 @@ $(document).ready(function(){
     var streamHTML = '<p class="streamName">'+ streamObj.name +'</p>';
     var textHTML =  '<p class="streamText">'+ streamObj.text +'</p>';
     var linkHTML =  '<p class="linkText">'+ streamObj.linkText +'</p>';
-    var tileHTML = '<div class="streamerTile col-xs-12 col-md-4"'+streamObj.status+'>'+streamHTML+logoHTML+textHTML+linkHTML+'</div>';
+    var tileHTML = '<div class="streamerTile col-xs-12 col-md-4 '+streamObj.status+'">'+streamHTML+logoHTML+textHTML+linkHTML+'</div>';
     var rowPos = 1;
     if(Math.ceil(index/3)>1){
       rowPos = Math.ceil(index/3);
@@ -107,12 +107,10 @@ $(document).ready(function(){
         },
         success: function(data){
           if((streamCount-1)%3 === 0){
-            console.log('time for a new row');
             var newRow = Math.ceil((streamCount+1)/3);
             var rowHTML = '<div class="row row'+newRow+'"></div>';
             $("#streamsContainer").append(rowHTML);
           }
-          console.log('about to fetch data');
           fetchData(data, channels.length, searchText);
         },
         error: function(){
@@ -120,7 +118,6 @@ $(document).ready(function(){
         }
       });
       streamCount = channels.length;
-      console.log(streamCount);
     }
     $('#search-stream').val('');
 
@@ -133,6 +130,6 @@ $(document).ready(function(){
 
   $("#show_all").click(function(){
     console.log('show all');
-    $('.row').removeClass('hidden');
+    $('.streamerTile').removeClass('hidden');
   })
 });
