@@ -76,14 +76,16 @@ body {
 }
 
 #streamsContainer {
-  padding: 0 15%;
+  padding: 0 10%;
   font-size: 120%;
 }
 
 #streamsContainer > .row {
   border: 1px solid black;
   margin-bottom: 10px;
-  display: flex;
+ display:flex;
+  align-items: center;
+  
 }
 
 #streamsContainer img {
@@ -91,9 +93,6 @@ body {
   width: 100px;
 }
 
-.streamName {
-  margin-left: 10%;
-}
 
 .online {
   background-color: #B8CCA6;
@@ -102,10 +101,11 @@ body {
 .offline{
   background-color: #ccc;
 }
+
 .offline img {
   padding:7px;
 }
 
-.linkSpan {
-  align-self: flex-end;
+.link {
+
 }
