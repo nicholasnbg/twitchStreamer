@@ -7,9 +7,8 @@ $(document).ready(function(){
   var streamCount = 3;
   var rows = 1;
 
-  //store JSON data for each channel
+  //run ajax call for each channel
   channels.forEach(function(x,i){
-    console.log(streams_api+x+clientID);
     $.ajax({
       url: streams_api+x+clientID,
       dataType: "json",
@@ -44,7 +43,7 @@ $(document).ready(function(){
       streamInfo.status = "offline"
       streamInfo.name = channels[i];
       streamInfo.link = data._links.channel;
-      streamInfo.linkText = '<a href="https://www.twitch.tv/'+streamInfo.name+'/videos/all">Go to channel</a>';
+      streamInfo.linkText = '<a href="https://www.twitch.tv/'+streamInfo.name+'/videos/all" target="blank">Go to channel</a>';
       streamInfo.logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/ProhibitionSign2.svg/1200px-ProhibitionSign2.svg.png";
       //run function to append row
       insertStream(streamInfo);
@@ -55,7 +54,7 @@ $(document).ready(function(){
         streamInfo.status="online";
         streamInfo.text = name  + " is currently playing " + data.stream.game;
         streamInfo.logo =  data.stream.channel.logo;
-        streamInfo.linkText = '<a href="">Watch here</a>';
+        streamInfo.linkText = '<a href="https://www.twitch.tv/'+streamInfo.name+'" target="blank">Watch here</a>';
         streamInfo.link = data.stream._links.self;
         //run function to insert row
       insertStream(streamInfo);
@@ -71,6 +70,42 @@ $(document).ready(function(){
     var rowHTML = '<div class="row '+streamObj.status+'">'+logoHTML+streamHTML+textHTML+linkHTML+'</div>';
     $("#streamsContainer").append(rowHTML);
   };
+
+  //add stream input bar functions
+  $('#search-btn').click(function(){
+    var searchText = $('#search-stream').val();
+    if(searchText.length == 0){
+      console.log('no search text');
+      $('#search-stream').attr('placeholder','Please enter a streamer');
+    }
+    else{
+      channels.push(searchText);
+      $.ajax({
+        url: streams_api+searchText+clientID,
+        dataType: "json",
+        data: {
+          format: "json",
+        },
+        success: function(data){
+          fetchData(data, channels.length-1);
+        },
+        error: function(){
+          console.log("Couldn't access JSON");
+        }
+      });
+    }
+  })
+
+  //online only and all button functions
+  $('#show_online').click(function(){
+    $('.offline').addClass('hidden');
+  })
+
+  $("#show_all").click(function(){
+    console.log('show all');
+    $('.row').removeClass('hidden');
+  })
+
 
 
 

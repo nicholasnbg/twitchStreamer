@@ -60,6 +60,12 @@ body {
   margin-bottom: 40px;
 }
 
+.btn:focus,.btn:active:focus,.btn.active:focus,
+.btn.focus,.btn:active.focus,.btn.active.focus {
+    outline: none;
+}
+
+
 #search-stream {
   padding: 10px 20px;
   text-align: center;
@@ -85,7 +91,7 @@ body {
   margin-bottom: 10px;
  display:flex;
   align-items: center;
-  
+
 }
 
 #streamsContainer img {
@@ -106,6 +112,19 @@ body {
   padding:7px;
 }
 
-.link {
+.hidden {
+  display: none;
+}
 
+
+/*STREAMER TILE CSS*/
+.streamerTile {
+  padding: 10px;
+  background: #F6E7FF;
+  border: 2px solid black;
+  border-radius: 1em;
+  box-shadow: 10px 10px 5px #888888;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

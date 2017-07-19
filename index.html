@@ -3,10 +3,11 @@
   <head>
     <meta charset="utf-8">
     <title>Twitch Streamer</title>
-    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap.css">
+      <link rel="stylesheet" href="css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="js/logic.js"></script>
+  </head>
   <body>
     <div class="header-row">
   <div class="container">
@@ -25,8 +26,8 @@
     </div>
     <div class="row menu">
       <div class="col-xs-12 col-md-3 col-md-offset-2" id="toggle">
-          <button class="btn btn-default">All</button>
-          <button class="btn btn-success">Online</button>
+          <button id="show_all" class="btn btn-default">All</button>
+          <button id="show_online" class="btn btn-success">Online</button>
       </div>
       <div class="col-xs-12 col-md-5" id="search-menu">
         <input id="search-stream" type="text" placeholder="Find streams...">
