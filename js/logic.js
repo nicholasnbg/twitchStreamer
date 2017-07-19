@@ -3,12 +3,15 @@ $(document).ready(function(){
   //variables
   var clientID = '?client_id=z2yjt6dgs59kua030e1m9pa1i9rifx';
   var streams_api = "https://api.twitch.tv/kraken/streams/";
-  var channels = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
+  var channels = ["ESL_SC2", "OgamingSC2", "cretetion" ];
   var streamCount = 3;
   var rows = 1;
 
+  createRows();
+
   //run ajax call for each channel
   channels.forEach(function(x,i){
+    console.log(streams_api+x+clientID);
     $.ajax({
       url: streams_api+x+clientID,
       dataType: "json",
@@ -16,7 +19,8 @@ $(document).ready(function(){
         format: "json",
       },
       success: function(data){
-        fetchData(data, i);
+        fetchData(data, i, x);
+
       },
       error: function(){
         console.log("Couldn't access JSON");
@@ -25,7 +29,7 @@ $(document).ready(function(){
     });
   });
 
-  function fetchData(data, i){
+  function fetchData(data, i, name){
 
     var streamInfo = {
       'logo':'',
@@ -38,44 +42,59 @@ $(document).ready(function(){
 
     //offline is currently running both ifs, fix this
     if(data.stream === null){
-      console.log('stream is null');
       streamInfo.text = " is OFFLINE";
       streamInfo.status = "offline"
-      streamInfo.name = channels[i];
+      streamInfo.name = name;
       streamInfo.link = data._links.channel;
       streamInfo.linkText = '<a href="https://www.twitch.tv/'+streamInfo.name+'/videos/all" target="blank">Go to channel</a>';
       streamInfo.logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/ProhibitionSign2.svg/1200px-ProhibitionSign2.svg.png";
-      //run function to append row
-      insertStream(streamInfo);
+      insertStream(streamInfo,i);
     }
     else if(data.stream._id){
-      console.log('stream is live');
-        streamInfo.name = channels[i];
+        streamInfo.name = name;
         streamInfo.status="online";
-        streamInfo.text = name  + " is currently playing " + data.stream.game;
+        streamInfo.text = " is currently playing " + data.stream.game;
         streamInfo.logo =  data.stream.channel.logo;
         streamInfo.linkText = '<a href="https://www.twitch.tv/'+streamInfo.name+'" target="blank">Watch here</a>';
         streamInfo.link = data.stream._links.self;
-        //run function to insert row
-      insertStream(streamInfo);
-
+        insertStream(streamInfo,i);
     }
+
   }
 
-  function insertStream(streamObj){
-    var logoHTML = '<div class="col-xs-2"><img src="'+streamObj.logo+'" alt=""></div>';
-    var streamHTML = '<div class="col-xs-3" class="streamName">'+ streamObj.name +'</div>';
-    var textHTML =  '<div class="col-xs-5" class="streamText">'+ streamObj.text +'</div>';
-    var linkHTML =  '<div class="col-xs-2" class="linkText">'+ streamObj.linkText +'</div>';
-    var rowHTML = '<div class="row '+streamObj.status+'">'+logoHTML+streamHTML+textHTML+linkHTML+'</div>';
-    $("#streamsContainer").append(rowHTML);
+  function createRows() {
+    console.log('creating row');
+    var count = channels.length;
+    var reqRows = Math.ceil(count/3);
+    var rowsArr = [];
+    for(i=1;i<=reqRows;i++){
+      rowsArr.push(i);
+    }
+    rowsArr.forEach(function(rowNum){
+      var rowHTML = '<div class="row row'+rowNum+'"></div>';
+      $("#streamsContainer").append(rowHTML);
+    });
+  }
+
+/// TODO: Need to work out overflow, or concats for long names
+  function insertStream(streamObj, index){
+    console.log('inserting stream');
+    var logoHTML = '<img src="'+streamObj.logo+'" alt="">';
+    var streamHTML = '<p class="streamName">'+ streamObj.name +'</p>';
+    var textHTML =  '<p class="streamText">'+ streamObj.text +'</p>';
+    var linkHTML =  '<p class="linkText">'+ streamObj.linkText +'</p>';
+    var tileHTML = '<div class="streamerTile col-xs-12 col-md-4"'+streamObj.status+'>'+streamHTML+logoHTML+textHTML+linkHTML+'</div>';
+    var rowPos = 1;
+    if(Math.ceil(index/3)>1){
+      rowPos = Math.ceil(index/3);
+    }
+    $(".row"+rowPos).append(tileHTML);
   };
 
   //add stream input bar functions
   $('#search-btn').click(function(){
     var searchText = $('#search-stream').val();
     if(searchText.length == 0){
-      console.log('no search text');
       $('#search-stream').attr('placeholder','Please enter a streamer');
     }
     else{
@@ -87,13 +106,24 @@ $(document).ready(function(){
           format: "json",
         },
         success: function(data){
-          fetchData(data, channels.length-1);
+          if((streamCount-1)%3 === 0){
+            console.log('time for a new row');
+            var newRow = Math.ceil((streamCount+1)/3);
+            var rowHTML = '<div class="row row'+newRow+'"></div>';
+            $("#streamsContainer").append(rowHTML);
+          }
+          console.log('about to fetch data');
+          fetchData(data, channels.length, searchText);
         },
         error: function(){
           console.log("Couldn't access JSON");
         }
       });
+      streamCount = channels.length;
+      console.log(streamCount);
     }
+    $('#search-stream').val('');
+
   })
 
   //online only and all button functions
@@ -105,12 +135,4 @@ $(document).ready(function(){
     console.log('show all');
     $('.row').removeClass('hidden');
   })
-
-
-
-
-
-
-
-
 });
