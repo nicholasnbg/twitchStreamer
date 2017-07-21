@@ -3,9 +3,9 @@ $(document).ready(function(){
   //variables
   var clientID = '?client_id=z2yjt6dgs59kua030e1m9pa1i9rifx';
   var streams_api = "https://api.twitch.tv/kraken/streams/";
-  var channels = ["ESL_SC2", "OgamingSC2", "cretetion" ];
-  var streamCount = 3;
-  var rows = 1;
+  var channels = ["ESL_SC2", "OgamingSC2", "cretetion", 'fakestream154651323' ];
+  var streamCount = 4;
+  var rows = 2;
 
   createRows();
 
@@ -63,13 +63,13 @@ $(document).ready(function(){
   }
 
   function createRows() {
-    console.log('creating row');
     var count = channels.length;
     var reqRows = Math.ceil(count/3);
     var rowsArr = [];
     for(i=1;i<=reqRows;i++){
       rowsArr.push(i);
     }
+      console.log('rows req = '+ rowsArr);
     rowsArr.forEach(function(rowNum){
       var rowHTML = '<div class="row row'+rowNum+'"></div>';
       $("#streamsContainer").append(rowHTML);
@@ -85,9 +85,10 @@ $(document).ready(function(){
     var linkHTML =  '<p class="linkText">'+ streamObj.linkText +'</p>';
     var tileHTML = '<div class="streamerTile col-xs-12 col-md-4 '+streamObj.status+'">'+streamHTML+logoHTML+textHTML+linkHTML+'</div>';
     var rowPos = 1;
-    if(Math.ceil(index/3)>1){
-      rowPos = Math.ceil(index/3);
+    if(Math.ceil((index+1)/3)>1){
+      rowPos = Math.ceil((index+1)/3);
     }
+    console.log('inserting into row '+rowPos + ' because index is '+index);
     $(".row"+rowPos).append(tileHTML);
   };
 
@@ -111,7 +112,7 @@ $(document).ready(function(){
             var rowHTML = '<div class="row row'+newRow+'"></div>';
             $("#streamsContainer").append(rowHTML);
           }
-          fetchData(data, channels.length, searchText);
+          fetchData(data, channels.length-1, searchText);
         },
         error: function(){
           console.log("Couldn't access JSON");
