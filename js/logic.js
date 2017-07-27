@@ -119,6 +119,7 @@ console.log(streamData)
 
     if(channelData.error){
       console.log('channel is not found ERROR');
+      channels.pop();
     }
     else{
       console.log('channel is found !!!');
@@ -129,7 +130,7 @@ console.log(streamData)
       streamInfo.linkText = '<a href="https://www.twitch.tv/'+channelData.name+'/videos/all" target="blank">Go to channel</a>';
       streamInfo.logo = channelData.logo;
       streamData[i]= streamInfo;
-      console.log('inserting data with '+streamInfo+' '+i);
+      console.log('inserting  channel data with '+streamInfo+' '+i);
       insertStream(streamInfo,i);
     }
 
