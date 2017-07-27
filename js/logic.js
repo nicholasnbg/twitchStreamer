@@ -94,11 +94,11 @@ console.log(streamData)
 
 /// TODO: Need to work out overflow, or concats for long names
   function insertStream(streamObj, index){
-    var logoHTML = '<img src="'+streamObj.logo+'" alt="">';
+    var logoHTML = '<img class="img-responsive img-rounded" src="'+streamObj.logo+'" alt="">';
     var streamHTML = '<p class="streamName">'+ streamObj.name +'</p>';
     var textHTML =  '<p class="streamText">'+ streamObj.text +'</p>';
     var linkHTML =  '<p class="linkText">'+ streamObj.linkText +'</p>';
-    var tileHTML = '<div class="streamerTile col-xs-12 col-md-4 '+streamObj.status+'">'+streamHTML+logoHTML+textHTML+linkHTML+'</div>';
+    var tileHTML = '<div class="streamerTile col-xs-12 col-md-4  '+streamObj.status+'">'+streamHTML+logoHTML+textHTML+linkHTML+'</div>';
     var rowPos = 1;
     if(Math.ceil((index+1)/3)>1){
       rowPos = Math.ceil((index+1)/3);
@@ -148,6 +148,11 @@ function errorMessage(){
 
 
   //add stream input bar functions
+  $('#search-stream').keypress(function(event){
+  if(event.keyCode == 13){
+    $('#search-btn').click();
+  }
+});
   $('#search-btn').click(function(){
     var searchText = $('#search-stream').val();
     if(searchText.length == 0){

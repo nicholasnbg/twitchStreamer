@@ -1,5 +1,6 @@
 body {
   padding-bottom: 30px;
+  font-family: Helvetica, Arial;
 }
 
 .container {
@@ -109,8 +110,9 @@ body {
 }
 
 #streamsContainer img {
-  height: 100px;
-  width: 100px;
+  height: 150px;
+  width: 150px;
+  border-radius:
 }
 
 
@@ -121,10 +123,7 @@ body {
 .offline{
   background-color: #ccc !important;
 }
-
-.offline img {
-  padding:7px;
-}
+  
 
 .hidden {
   display: none;
