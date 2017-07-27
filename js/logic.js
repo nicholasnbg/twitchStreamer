@@ -3,10 +3,10 @@ $(document).ready(function(){
   //variables
   var clientID = '?client_id=z2yjt6dgs59kua030e1m9pa1i9rifx';
   var streams_api = "https://api.twitch.tv/kraken/streams/";
-  var channels = ["ESL_SC2", "OgamingSC2", "cretetion", 'fakestream154651323' ];
+  var channels = ["ESL_SC2", "OgamingSC2", "cretetion"];
   var streamData = [];
-  var streamCount = 4;
-  var rows = 2;
+  var streamCount = 3;
+  var rows = 1;
 
   createRows();
 
@@ -46,16 +46,21 @@ console.log(streamData)
     //offline is currently running both ifs, fix this
     if(data.stream === null){
       //check for real channel here
-
-          streamInfo.text = " is OFFLINE";
-          streamInfo.status = "offline"
-          streamInfo.name = name;
-          streamInfo.link = data._links.channel;
-          streamInfo.linkText = '<a href="https://www.twitch.tv/'+streamInfo.name+'/videos/all" target="blank">Go to channel</a>';
-          streamInfo.logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/ProhibitionSign2.svg/1200px-ProhibitionSign2.svg.png";
-          streamData[i]= streamInfo;
-          console.log('inserting data with '+streamInfo+' '+i);
-          insertStream(streamInfo,i);
+      $.ajax({
+        url: data._links.channel+clientID,
+        dataType: "json",
+        data: {
+          format: "json",
+        },
+        success: function(data){
+         //what to do here to split offline real users and fake users
+          getChannel(data,i);
+        },
+        error: function(){
+          console.log("Couldn't access JSON in check channel");
+          errorMessage();
+        }
+      });
 
         }
 
@@ -101,29 +106,46 @@ console.log(streamData)
     $(".row"+rowPos).append(tileHTML);
   };
 
-  function getChannel(channel){
-    var real = true;
-    $.ajax({
-      url: channel+clientID,
-      dataType: "json",
-      data: {
-        format: "json",
-      },
-      success: function(data){
-       //what to do here to split offline real users and fake users
-        noChannel(data);
-      },
-      error: function(){
-        console.log("Couldn't access JSON in check channel"+channel + ' is no good, '+ 404);
-      }
-    });
-  }
+  function getChannel(channelData,i){
 
-  function noChannel(data){
-    if(data.status!== 404){
-
+    var streamInfo = {
+      'logo':'',
+      'text':'',
+      'name:':'',
+      'link':'',
+      'status':'',
+      'linkText':'',
     }
+
+    if(channelData.error){
+      console.log('channel is not found ERROR');
+    }
+    else{
+      console.log('channel is found !!!');
+      streamInfo.text = " is OFFLINE";
+      streamInfo.status = "offline"
+      streamInfo.name = channelData.name;
+      streamInfo.link = channelData._links.self;
+      streamInfo.linkText = '<a href="https://www.twitch.tv/'+channelData.name+'/videos/all" target="blank">Go to channel</a>';
+      streamInfo.logo = channelData.logo;
+      streamData[i]= streamInfo;
+      console.log('inserting data with '+streamInfo+' '+i);
+      insertStream(streamInfo,i);
+    }
+
+
+
+
+
   }
+
+function errorMessage(){
+  $('.error').fadeIn('fast');
+  setTimeout(function(){
+    $('.error').fadeOut('slow');
+  },2000);
+}
+
 
   //add stream input bar functions
   $('#search-btn').click(function(){
