@@ -3,12 +3,11 @@ $(document).ready(function(){
   //variables
   var clientID = '?client_id=z2yjt6dgs59kua030e1m9pa1i9rifx';
   var streams_api = "https://api.twitch.tv/kraken/streams/";
-  var channels = ["ESL_SC2", "OgamingSC2", "cretetion"];
+  var channels = ["ESL_SC2",  "cretetion","freecodecamp", "habathcx","OgamingSC2", "RobotCaleb", "noobs2ninjas" ];
   var streamData = [];
   var streamCount = 3;
-  var rows = 1;
 
-  createRows();
+console.log(channels);
 
   //run ajax call for each channel
   channels.forEach(function(x,i){
@@ -73,24 +72,12 @@ console.log(streamData)
         streamInfo.linkText = '<a href="https://www.twitch.tv/'+streamInfo.name+'" target="blank">Watch here</a>';
         streamInfo.link = data.stream._links.self;
         streamData[i]= streamInfo;
-        console.log('inserting data with '+streamInfo+' '+i);
         insertStream(streamInfo,i);
     }
 
   }
 
-  function createRows() {
-    var count = channels.length;
-    var reqRows = Math.ceil(count/3);
-    var rowsArr = [];
-    for(i=1;i<=reqRows;i++){
-      rowsArr.push(i);
-    }
-    rowsArr.forEach(function(rowNum){
-      var rowHTML = '<div class="row row'+rowNum+'"></div>';
-      $("#streamsContainer").append(rowHTML);
-    });
-  }
+
 
 /// TODO: Need to work out overflow, or concats for long names
   function insertStream(streamObj, index){
@@ -99,11 +86,7 @@ console.log(streamData)
     var textHTML =  '<p class="streamText">'+ streamObj.text +'</p>';
     var linkHTML =  '<p class="linkText">'+ streamObj.linkText +'</p>';
     var tileHTML = '<div class="streamerTile col-xs-12 col-md-4  '+streamObj.status+'">'+streamHTML+logoHTML+textHTML+linkHTML+'</div>';
-    var rowPos = 1;
-    if(Math.ceil((index+1)/3)>1){
-      rowPos = Math.ceil((index+1)/3);
-    }
-    $(".row"+rowPos).append(tileHTML);
+    $('#streamsContainer').append(tileHTML);
   };
 
   function getChannel(channelData,i){
@@ -130,7 +113,6 @@ console.log(streamData)
       streamInfo.linkText = '<a href="https://www.twitch.tv/'+channelData.name+'/videos/all" target="blank">Go to channel</a>';
       streamInfo.logo = channelData.logo;
       streamData[i]= streamInfo;
-      console.log('inserting  channel data with '+streamInfo+' '+i);
       insertStream(streamInfo,i);
     }
 
@@ -168,11 +150,6 @@ function errorMessage(){
           format: "json",
         },
         success: function(data){
-          if((streamCount-1)%3 === 0){
-            var newRow = Math.ceil((streamCount+1)/3);
-            var rowHTML = '<div class="row row'+newRow+'"></div>';
-            $("#streamsContainer").append(rowHTML);
-          }
           fetchData(data, channels.length-1, searchText);
         },
         error: function(){
@@ -187,11 +164,11 @@ function errorMessage(){
 
   //online only and all button functions
   $('#show_online').click(function(){
-    $('.offline').addClass('hidden');
+    $('.offline').hide(600);
   })
 
   $("#show_all").click(function(){
     console.log('show all');
-    $('.streamerTile').removeClass('hidden');
+    $('.streamerTile').show(600);
   })
 });
